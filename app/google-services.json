@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "899044135905",
+    "project_id": "cringe-53d2f",
+    "storage_bucket": "cringe-53d2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899044135905:android:bea17ab0d9acb8f84978a0",
+        "android_client_info": {
+          "package_name": "com.sunayanpradhan.cringe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899044135905-7soaj7qp1m77buckufj1s7qidpggb8k0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuSjIbjLezA1S7GHjSz9Yh_OoOXFAXJLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899044135905-7soaj7qp1m77buckufj1s7qidpggb8k0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
