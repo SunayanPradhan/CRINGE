@@ -1,38 +1,36 @@
-package com.sunayanpradhan.cringe.Activities
+package com.sunayanpradhan.cringe.Fragments
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.OnProgressListener
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
+import com.sunayanpradhan.cringe.Activities.UploadActivity
 import com.sunayanpradhan.cringe.Models.UserModel
 import com.sunayanpradhan.cringe.Models.VideoModel
 import com.sunayanpradhan.cringe.R
-import com.sunayanpradhan.cringe.databinding.ActivityUploadBinding
+import com.sunayanpradhan.cringe.databinding.FragmentUploadVideoBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 
 
-class UploadActivity : AppCompatActivity() {
+class UploadVideoFragment : Fragment() {
 
-    private lateinit var binding: ActivityUploadBinding
+    private lateinit var binding: FragmentUploadVideoBinding
 
     private lateinit var firebaseAuth: FirebaseAuth
 
@@ -45,15 +43,24 @@ class UploadActivity : AppCompatActivity() {
 
     private var videoType= true
 
-    companion object {
-        const val ACTION_CUSTOM_BROADCAST = "com.sunayanpradhan.cringe.CUSTOM_ACTION"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_upload)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_upload)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_upload_video, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding= FragmentUploadVideoBinding.bind(view)
 
         firebaseAuth= FirebaseAuth.getInstance()
 
@@ -65,9 +72,9 @@ class UploadActivity : AppCompatActivity() {
 
         setUserData()
 
-        val videoUri = intent.getStringExtra("videoUri")
+        val videoUri = arguments?.getString("videoUri")
 
-        Glide.with(this.applicationContext).load(Uri.parse(videoUri)).into(binding.videoThumbnail)
+        Glide.with(requireContext().applicationContext).load(Uri.parse(videoUri)).into(binding.videoThumbnail)
 
         binding.optionSelectedBar.setOnClickListener {
 
@@ -115,8 +122,6 @@ class UploadActivity : AppCompatActivity() {
             }
         }
 
-
-
         binding.uploadVideo.setOnClickListener {
 
 
@@ -126,9 +131,7 @@ class UploadActivity : AppCompatActivity() {
 
                 uploadVideo(Uri.parse(videoUri),videoTitle,videoType)
 
-                val intent = Intent(ACTION_CUSTOM_BROADCAST)
 
-                sendBroadcast(intent)
 
             }
             else{
@@ -137,9 +140,6 @@ class UploadActivity : AppCompatActivity() {
 
                 uploadVideo(Uri.parse(videoUri),videoTitle,videoType)
 
-                val intent = Intent(ACTION_CUSTOM_BROADCAST)
-
-                sendBroadcast(intent)
 
             }
 
@@ -147,17 +147,21 @@ class UploadActivity : AppCompatActivity() {
 
         }
 
+        binding.uploadBack.setOnClickListener {
 
+            activity?.finish()
 
+        }
 
 
     }
 
+
     private fun uploadVideo(videoUri: Uri, videoTitle: String, videoType: Boolean) {
 
-        val dialogView = View.inflate(this, R.layout.custom_progress_dialog_layout, null)
+        val dialogView = View.inflate(requireContext(), R.layout.custom_progress_dialog_layout, null)
 
-        val builder = AlertDialog.Builder(this).setView(dialogView).create()
+        val builder = AlertDialog.Builder(requireContext()).setView(dialogView).create()
 
         val dialogTxt = dialogView.findViewById(R.id.dialog_txt) as TextView
 
@@ -200,9 +204,9 @@ class UploadActivity : AppCompatActivity() {
 
                     builder.dismiss()
 
-                    Toast.makeText(this, "Upload Successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Upload Successful", Toast.LENGTH_SHORT).show()
 
-                    finish()
+                    activity?.finish()
 
 
                 }
@@ -215,7 +219,7 @@ class UploadActivity : AppCompatActivity() {
 
         }.addOnFailureListener {
 
-            Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Upload Failed", Toast.LENGTH_SHORT).show()
 
         }
 
@@ -227,7 +231,7 @@ class UploadActivity : AppCompatActivity() {
 
     private fun setUserData(){
 
-        firebaseDatabase.reference.child("Users")
+        firebaseDatabase.reference.child("users")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -243,20 +247,14 @@ class UploadActivity : AppCompatActivity() {
 
                                 binding.userName.text=data?.userName
 
-                                Glide.with(this@UploadActivity.applicationContext)
+                                Glide.with(requireContext().applicationContext)
                                     .load(data?.userProfilePhoto)
                                     .into(binding.userProfile)
 
-
                             }
 
-
                         }
-
-
-
                     }
-
 
                 }
 

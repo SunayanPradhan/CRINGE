@@ -17,6 +17,7 @@
     <dimen name="margin_25dp">46.875dp</dimen>
     <dimen name="margin_30dp">55.8dp</dimen>
     <dimen name="margin_35dp">65.1dp</dimen>
+    <dimen name="margin_36dp">66.96dp</dimen>
     <dimen name="margin_40dp">74.4dp</dimen>
     <dimen name="margin_48dp">89.28dp</dimen>
     <dimen name="margin_50dp">93dp</dimen>

@@ -196,7 +196,7 @@ class SplashActivity : AppCompatActivity() {
                     val user = UserModel(firebaseUser?.uid.toString(),firebaseUser?.uid.toString(),firebaseUser?.displayName.toString(),firebaseUser?.photoUrl.toString(),"GOOGLE",false)
 
                     if (firebaseUser != null) {
-                        FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser.uid)
+                        FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser.uid)
                             .setValue(user).addOnSuccessListener {
 
                                 Toast.makeText(
@@ -253,7 +253,7 @@ class SplashActivity : AppCompatActivity() {
                     val user = UserModel(firebaseUser?.uid.toString(),firebaseUser?.uid.toString(),firebaseUser?.displayName.toString(),firebaseUser?.photoUrl.toString(),"FACEBOOK",false)
 
                     if (firebaseUser != null) {
-                        FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser.uid)
+                        FirebaseDatabase.getInstance().reference.child("users").child(firebaseUser.uid)
                             .setValue(user).addOnSuccessListener {
 
                                 Toast.makeText(

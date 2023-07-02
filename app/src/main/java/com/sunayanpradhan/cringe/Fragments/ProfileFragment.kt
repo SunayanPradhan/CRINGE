@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
 
     private fun setData(){
 
-        firebaseDatabase.reference.child("Users")
+        firebaseDatabase.reference.child("users")
             .addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -75,7 +75,7 @@ class ProfileFragment : Fragment() {
 
                             if (data?.userId==firebaseAuth.currentUser?.uid){
 
-                                binding.profileId.text=data?.userId
+                                binding.profileId.text="@"+data?.userTag
 
                                 binding.profileProfileName.text=data?.userName
 
