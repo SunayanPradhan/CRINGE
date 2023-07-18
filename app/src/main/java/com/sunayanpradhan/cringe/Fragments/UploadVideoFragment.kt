@@ -1,9 +1,14 @@
 package com.sunayanpradhan.cringe.Fragments
 
-import android.content.Intent
+import android.content.ContentValues.TAG
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -19,16 +25,24 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.sunayanpradhan.cringe.Activities.UploadActivity
+import com.google.gson.JsonObject
+import com.otaliastudios.autocomplete.Autocomplete
+import com.otaliastudios.autocomplete.AutocompleteCallback
+import com.otaliastudios.autocomplete.AutocompletePolicy
+import com.otaliastudios.autocomplete.AutocompletePresenter
+import com.otaliastudios.autocomplete.CharPolicy
 import com.sunayanpradhan.cringe.Models.UserModel
 import com.sunayanpradhan.cringe.Models.VideoModel
 import com.sunayanpradhan.cringe.R
+import com.sunayanpradhan.cringe.Utils.HashPresenter
+import com.sunayanpradhan.cringe.Utils.UserPresenter
 import com.sunayanpradhan.cringe.databinding.FragmentUploadVideoBinding
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
-class UploadVideoFragment : Fragment() {
+class UploadVideoFragment : Fragment(){
 
     private lateinit var binding: FragmentUploadVideoBinding
 
@@ -122,12 +136,17 @@ class UploadVideoFragment : Fragment() {
             }
         }
 
+
+
+
+
+
         binding.uploadVideo.setOnClickListener {
 
 
             if (binding.videoTitle.text.isEmpty()){
 
-                val videoTitle= SimpleDateFormat.getInstance().format(Date()).toString()
+                val videoTitle= Date().time.toTimeDateString()
 
                 uploadVideo(Uri.parse(videoUri),videoTitle,videoType)
 
@@ -152,6 +171,8 @@ class UploadVideoFragment : Fragment() {
             activity?.finish()
 
         }
+
+        setupMentionsAutocomplete()
 
 
     }
@@ -270,7 +291,81 @@ class UploadVideoFragment : Fragment() {
 
     }
 
+//    private fun setupHashAutocomplete() {
+//        val elevation = 6f
+//        val hash: MutableList<String> = ArrayList()
+//        hash.add("hash")
+//        hash.add("happy")
+//        hash.add("enjoy")
+//        hash.add("sad")
+//        hash.add("party")
+//        hash.add("bash")
+//        hash.add("color")
+//        hash.add("define")
+//        val backgroundDrawable: Drawable = ColorDrawable(Color.WHITE)
+//        val hashpolicy: AutocompletePolicy = CharPolicy('#') // Look for #hash
+//        val hashpresenter: AutocompletePresenter<String> = HashPresenter(this, hash)
+//        val hashcallback: AutocompleteCallback<String> = object : AutocompleteCallback<String> {
+//            override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
+//                // Replace query text with the full name.
+//                val range = CharPolicy.getQueryRange(editable) ?: return false
+//                val start = range[0]
+//                val end = range[1]
+//                editable.replace(start, end, item)
+//                // This is better done with regexes and a TextWatcher, due to what happens when
+//                // the user clears some parts of the text. Up to you.
+////                editable.setSpan(new StyleSpan(Typeface.BOLD), start, start+replacement.length(),
+////                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                Log.d(TAG, "AutoComplete text value---->$editable")
+//                return true
+//            }
+//
+//            override fun onPopupVisibilityChanged(shown: Boolean) {}
+//        }
+//        val hashAutocomplete = Autocomplete.on<String>(binding.videoTitle)
+//            .with(elevation)
+//            .with(backgroundDrawable)
+//            .with(hashpolicy)
+//            .with(hashpresenter)
+//            .with(hashcallback)
+//            .build()
+//    }
 
+    private fun setupMentionsAutocomplete() {
+        val mentionsUser = JsonObject()
+        val elevation = 6f
+        val backgroundDrawable: Drawable = ColorDrawable(Color.WHITE)
+        val policy: AutocompletePolicy = CharPolicy('@') // Look for @mentions
+        val presenter = UserPresenter(requireContext())
+        val callback: AutocompleteCallback<UserModel> = object : AutocompleteCallback<UserModel> {
+            override fun onPopupItemClicked(editable: Editable, item: UserModel): Boolean {
+                // Replace query text with the full name.
+                val range = CharPolicy.getQueryRange(editable) ?: return false
+                val start = range[0]
+                val end = range[1]
+                val replacement: String = "<b>"+item.userTag+"</b>"
+                editable.replace(start, end, Html.fromHtml(replacement))
+                // This is better done with regexes and a TextWatcher, due to what happens when
+                // the user clears some parts of the text. Up to you.
+                mentionsUser.addProperty("user_" + item.userTag, item.userName)
+                return true
+            }
 
+            override fun onPopupVisibilityChanged(shown: Boolean) {}
+        }
+        val mentionsAutocomplete = Autocomplete.on<UserModel>(binding.videoTitle)
+            .with(elevation)
+            .with(backgroundDrawable)
+            .with(policy)
+            .with(presenter)
+            .with(callback)
+            .build()
+    }
+
+    private fun Long.toTimeDateString(): String {
+        val dateTime = Date(this)
+        val format = SimpleDateFormat("dd.MM.yyyy hh:mm a", Locale.getDefault())
+        return format.format(dateTime)
+    }
 
 }

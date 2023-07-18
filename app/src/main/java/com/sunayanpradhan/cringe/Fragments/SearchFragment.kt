@@ -5,29 +5,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.sunayanpradhan.cringe.Adapters.SearchAdapter
+import com.sunayanpradhan.cringe.Models.UserModel
 import com.sunayanpradhan.cringe.R
+import com.sunayanpradhan.cringe.databinding.FragmentSearchBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentSearchBinding
+
+    private lateinit var list: ArrayList<UserModel>
+
+    private lateinit var adapter: SearchAdapter
+
+    private lateinit var firebaseDatabase: FirebaseDatabase
+
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+
     }
 
     override fun onCreateView(
@@ -38,23 +44,58 @@ class SearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentSearchBinding.bind(view)
+
+        firebaseDatabase= FirebaseDatabase.getInstance()
+
+        firebaseAuth= FirebaseAuth.getInstance()
+
+        list= ArrayList()
+
+        adapter= SearchAdapter(list,requireContext())
+
+        val layoutManager= LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+
+        binding.searchRecyclerview.layoutManager= layoutManager
+
+        binding.searchRecyclerview.adapter= adapter
+
+        firebaseDatabase.reference.child("users")
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                    if (snapshot.exists()){
+
+                        for (dataSnapshot in snapshot.children){
+
+                            val data= dataSnapshot.getValue(UserModel::class.java)
+
+                            list.add(data!!)
+
+
+                        }
+
+                        adapter.notifyDataSetChanged()
+
+
+                    }
+
+
                 }
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+
+
+                }
+
+
+            })
+
+
     }
+
 }

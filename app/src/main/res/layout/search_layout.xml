@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_8dp"
+        android:background="?selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_profile_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/search_name_layout"
+            android:layout_marginEnd="@dimen/margin_10dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:cardCornerRadius="@dimen/margin_100dp">
+
+                <ImageView
+                    android:id="@+id/search_profile"
+                    android:layout_width="@dimen/margin_50dp"
+                    android:layout_height="@dimen/margin_50dp"
+                    android:scaleType="centerCrop">
+
+                </ImageView>
+
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/white_circle"
+                app:layout_constraintBottom_toBottomOf="@id/profile_card"
+                app:layout_constraintEnd_toEndOf="@id/profile_card"
+                app:layout_constraintStart_toStartOf="@id/profile_card"
+                app:layout_constraintTop_toTopOf="@id/profile_card" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/search_name_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/search_follow"
+            app:layout_constraintStart_toEndOf="@+id/search_profile_layout"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/search_profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/margin_18dp"
+                android:textStyle="bold"
+                android:textColor="@color/white">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/search_profile_tag"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/white">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/search_follow"
+            android:layout_width="@dimen/margin_100dp"
+            android:layout_height="@dimen/margin_30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/search_name_layout"
+            android:layout_marginStart="@dimen/margin_10dp"
+            android:background="@drawable/follow_button"
+            android:textColor="@color/white"
+            android:text="FOLLOW"
+            android:visibility="gone">
+
+        </android.widget.Button>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

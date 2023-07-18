@@ -24,6 +24,12 @@
         android:theme="@style/Theme.CRINGE"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.PreviewUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.CringeViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.PreviewUploadActivity"
             android:exported="false" />
         <activity

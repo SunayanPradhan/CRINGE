@@ -4,12 +4,15 @@ import android.Manifest
 import android.Manifest.permission
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -85,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAddVideoDialog() {
 
-        val bottomSheetDialog= BottomSheetDialog(this,R.style.AppBottomSheetDialogTheme)
+        val bottomSheetDialog= BottomSheetDialog(this,R.style.BottomSheetDialogTheme)
 
         val bottomSheetView: View = layoutInflater.inflate(R.layout.add_video_bar_layout,null)
 
